@@ -1,0 +1,12 @@
+<app-loader></app-loader>
+<nav class="navbar position-sticky header">
+    <span class="navbar-brand mb-0">Inventory System</span>
+    <form class="form-inline my-2 my-lg-0" *ngIf="isLogedIn">
+        <a type="button" class="btn btn-outline-secondary" [routerLink]="['/account/logout']">Logout</a>
+    </form>
+</nav>
+<div class="container-fluid mt-2">
+    <app-toast-message></app-toast-message>
+    <app-banner-message></app-banner-message>
+    <router-outlet></router-outlet>
+</div>
