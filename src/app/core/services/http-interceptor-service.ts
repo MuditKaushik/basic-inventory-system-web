@@ -8,18 +8,15 @@ import { AppCommonService } from './common-service';
 export class HttpInterceptorService implements HttpInterceptor {
     private readonly commonHeaders: HttpHeaders = new HttpHeaders();
     constructor(private commonService: AppCommonService) {
-        this.commonHeaders.append('accept', 'appilcation/json');
-        this.commonHeaders.append('content-type', 'multipart/form-data;appilcation/json');
-        this.commonHeaders.append('response-type', 'multipart/form-data;application/json');
+        this.commonHeaders.set('accept', 'appilcation/json');
+        this.commonHeaders.set('content-type', 'multipart/form-data;appilcation/json');
+        this.commonHeaders.set('response-type', 'multipart/form-data;application/json');
     }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let token = window.localStorage.getItem('token');
-        if (token) {
-            this.commonHeaders.append('authorization', `bearer ${token}`);
-        }
-        console.log(this.commonHeaders.get('authorization'));
-        let copyRequest: HttpRequest<any> = req.clone({
+        let copyRequest: HttpRequest<any> = (!token) ? req : req.clone({
             headers: this.commonHeaders,
+            setHeaders: { authorization: `bearer ${token}` },
             responseType: 'json'
         });
         return next.handle(copyRequest).pipe(tap(() => {
